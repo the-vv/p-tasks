@@ -1,0 +1,7 @@
+{
+  "name": "P-Tasks",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
