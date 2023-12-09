@@ -1,25 +1,21 @@
 <ion-header>
   <ion-toolbar>
-    <ion-segment value="all">
-      <ion-segment-button value="all">
-        <ion-label>All</ion-label>
+    <ion-segment class="custom-header-segment" [scrollable]="true" (ionChange)="segmentChanged($event)"
+      [value]="selectedCategory()">
+      @for (item of categories(); track item.id) {
+      <ion-segment-button [value]="item.id">
+        <ion-label>{{item.name}}</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="new">
-        <ion-label>Favorites</ion-label>
-      </ion-segment-button>
+    }
+    <ion-segment-button [value]="null">
+      <ion-label>Add</ion-label>
+    </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div id="">
+    content
   </div>
 </ion-content>

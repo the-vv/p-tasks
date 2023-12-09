@@ -8,13 +8,14 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { AppInitService } from './app/services/app-init.service';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { StorageService } from './app/services/storage.service';
 
 if (environment.production) {
   enableProdMode();
 }
 
 const initializeApp = (appInitService: AppInitService) => {
-  return (): Promise<any> => {
+  return (): Promise<void> => {
     return appInitService.initApp();
   }
 }
@@ -28,7 +29,7 @@ bootstrapApplication(AppComponent, {
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
-      deps: [AppInitService],
+      deps: [AppInitService, StorageService],
       multi: true
     }
   ],
