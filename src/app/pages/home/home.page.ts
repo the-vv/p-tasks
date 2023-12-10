@@ -36,10 +36,13 @@ export class HomePage {
       console.error(error);
       // TODO show toast
     });
+    const element = this.matrixContainer.nativeElement;
+    element.scrollLeft = (element.scrollWidth - element.clientWidth) / 2;
+    element.scrollTop = (element.scrollHeight - element.clientHeight) / 2;
   }
 
   public segmentChanged(event: CustomEvent) {
-    // console.log(event.detail.value);
+    console.log(event.detail.value);
   }
 
   public scrollIntoView(card: any) {
