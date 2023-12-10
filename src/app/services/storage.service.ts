@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { EStorageKeys } from '../models/storage.model';
-import { ICategory } from '../models/tasks.model';
+import { ICategory, ITask } from '../models/tasks.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -33,6 +33,35 @@ export class StorageService {
       console.error(error);
       // TODO show toast
     })
+  }
+
+  public addTask(task: ITask) {
+    this.storage.get(EStorageKeys.tasks).then((tasks) => {
+      if (!tasks) {
+        tasks = [];
+      }
+      tasks.push(task);
+      this.storage.set(EStorageKeys.tasks, tasks);
+    }).catch((error) => {
+      console.error(error);
+      // TODO show toast
+    });
+  }
+
+  public getTasks(categoryId: string): Promise<ITask[]> {
+    return new Promise<ITask[]>((resolve, reject) => {
+      this.storage.get(EStorageKeys.tasks).then((tasks: ITask[]) => {
+        if (!tasks) {
+          return resolve([]);
+        }
+        const tasksFiltered = tasks.filter((task) => task.categoryId === categoryId);
+        resolve(tasksFiltered);
+      }).catch((error) => {
+        console.error(error);
+        // TODO show toast
+        return reject(error);
+      });
+    });
   }
 
 }

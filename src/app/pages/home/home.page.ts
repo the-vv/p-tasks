@@ -1,30 +1,48 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild, effect, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild, effect, signal } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { ICategory } from '../../models/tasks.model';
 import { IonicModule } from '@ionic/angular';
 import { AppConfigPipe } from 'src/app/pipes/app-config.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule, AppConfigPipe],
+  imports: [IonicModule, AppConfigPipe, CommonModule],
   providers: [
     StorageService
   ],
 })
-export class HomePage {
+export class HomePage implements AfterViewInit {
 
   @ViewChild('matrixContainer', { read: ElementRef }) matrixContainer!: ElementRef<HTMLDivElement>;
 
   public categories = signal<ICategory[]>([]);
   public selectedCategory = signal<string | null>(null);
+  public matrixLists: {
+    [key: number]: ICategory[]
+  } = {
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+  }
 
   constructor(private storage: StorageService, private crd: ChangeDetectorRef) {
     effect(() => {
       console.log(this.selectedCategory());
     }, { allowSignalWrites: true })
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      // make sure the matrix is centered
+      const element = this.matrixContainer.nativeElement;
+      element.scrollLeft = (element.scrollWidth - element.clientWidth) / 2;
+      element.scrollTop = (element.scrollHeight - element.clientHeight) / 2;
+    });
   }
 
   ionViewDidEnter() {
@@ -36,9 +54,6 @@ export class HomePage {
       console.error(error);
       // TODO show toast
     });
-    const element = this.matrixContainer.nativeElement;
-    element.scrollLeft = (element.scrollWidth - element.clientWidth) / 2;
-    element.scrollTop = (element.scrollHeight - element.clientHeight) / 2;
   }
 
   public segmentChanged(event: CustomEvent) {

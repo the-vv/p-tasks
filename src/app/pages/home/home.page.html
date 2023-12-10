@@ -6,36 +6,66 @@
       <ion-segment-button [value]="item.id">
         <ion-label>{{item.name}}</ion-label>
       </ion-segment-button>
-    }
-    <ion-segment-button [value]="null" layout="icon-end">
-      <ion-label>Add Matrix</ion-label>
-      <ion-icon name="add"></ion-icon>
-    </ion-segment-button>
+      }
+      <ion-segment-button [value]="null" layout="icon-end">
+        <ion-label>Add Matrix</ion-label>
+        <ion-icon name="add"></ion-icon>
+      </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="scroll-container overflow-x-auto w-full h-full" #matrixContainer id="matrixContainer">
-    <div class="h-[calc(200%-150px)] matrix-container grid grid-cols-2 w-[calc(200%-150px)] overflow-auto">
+    <div class="h-[calc(200%-150px-112px)] matrix-container grid grid-cols-2 w-[calc(200%-150px)] overflow-auto">
       <ion-card class="{{'matrix_top_left_class' | appConfig}}" #card1 (click)="scrollIntoView(card1)" id="card1">
-        <ion-card-content>
-          check
+        <ion-card-content class="h-full w-full">
+          @for (item of matrixLists[0]; track item.id) {
+
+          } @empty {
+          <div class="flex items-center justify-center h-full w-full flex-col">
+            <span class="text-3xl text-center">Do First</span>
+            <span class="text-center text=2xl mt-6">These are the tasks that you need to focus on immediately.</span>
+          </div>
+          }
         </ion-card-content>
       </ion-card>
       <ion-card class="{{'matrix_top_right_class' | appConfig}}" #card2 (click)="scrollIntoView(card2)">
-        <ion-card-content>
-          Here's a small text description for the card content. Nothing more, nothing less.
+        <ion-card-content class="h-full w-full">
+          @for (item of matrixLists[1]; track item.id) {
+
+          } @empty {
+          <div class="flex items-center justify-center h-full w-full flex-col">
+            <span class="text-3xl text-center">Schedule</span>
+            <span class="text-center text=2xl mt-6">These are the tasks that are important but do not have a deadline
+              that is approaching soon.</span>
+          </div>
+          }
         </ion-card-content>
       </ion-card>
       <ion-card class="{{'matrix_bottom_left_class' | appConfig}}" #card3 (click)="scrollIntoView(card3)">
-        <ion-card-content>
-          Here's a small text description for the card content. Nothing more, nothing less.
+        <ion-card-content class="h-full w-full">
+          @for (item of matrixLists[2]; track item.id) {
+
+          } @empty {
+          <div class="flex items-center justify-center h-full w-full flex-col">
+            <span class="text-3xl text-center">Delegate</span>
+            <span class="text-center text=2xl mt-6">These are the tasks that are not important but do have a deadline
+              that is approaching soon.</span>
+          </div>
+          }
         </ion-card-content>
       </ion-card>
       <ion-card class="{{'matrix_bottom_right_class' | appConfig}}" #card4 (click)="scrollIntoView(card4)">
-        <ion-card-content>
-          Here's a small text description for the card content. Nothing more, nothing less.
+        <ion-card-content class="h-full w-full">
+          @for (item of matrixLists[3]; track item.id) {
+
+          } @empty {
+          <div class="flex items-center justify-center h-full w-full flex-col">
+            <span class="text-3xl text-center">Eliminate</span>
+            <span class="text-center text=2xl mt-6">These are the tasks that are neither important nor urgent.</span>
+          </div>
+          }
         </ion-card-content>
       </ion-card>
     </div>
