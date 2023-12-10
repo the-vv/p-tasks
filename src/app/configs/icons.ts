@@ -1,8 +1,11 @@
 import { addIcons } from "ionicons";
-import { add } from 'ionicons/icons';
+import {
+    add,
+    arrowForward
+} from 'ionicons/icons';
 
 export const setupIcons = () => {
     addIcons({
-        add
+        add, arrowForward
     })
 }

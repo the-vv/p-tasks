@@ -25,4 +25,14 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-@import "./assets/styles/common.scss"
+@import "./assets/styles/common";
+@import "./assets/styles/fonts";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// set the default font family to Montserrat
+:root {
+    --ion-font-family: Montserrat, sans-serif;
+}

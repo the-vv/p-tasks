@@ -21,7 +21,7 @@ export class StorageService {
           id: uuidv4(),
           name: 'Default Matrix',
           color: 'primary',
-          index: Number.MAX_SAFE_INTEGER - 1,
+          index: Number.MAX_SAFE_INTEGER,
         },
       ]);
     }

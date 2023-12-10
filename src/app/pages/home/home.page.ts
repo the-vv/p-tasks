@@ -1,14 +1,14 @@
 import { ChangeDetectorRef, Component, signal } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonSpinner } from '@ionic/angular/standalone';
-import { StorageService } from '../services/storage.service';
-import { ICategory } from '../models/tasks.model';
+import { StorageService } from '../../services/storage.service';
+import { ICategory } from '../../models/tasks.model';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonSpinner],
+  imports: [IonicModule],
   providers: [
     StorageService
   ],
