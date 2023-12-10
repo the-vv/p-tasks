@@ -19,7 +19,7 @@ export class StorageService {
       await this.storage.set(EStorageKeys.tasksCategories, [
         {
           id: uuidv4(),
-          name: 'Default category',
+          name: 'Default Matrix',
           color: 'primary',
           index: Number.MAX_SAFE_INTEGER - 1,
         },

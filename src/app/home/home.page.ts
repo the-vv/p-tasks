@@ -11,19 +11,20 @@ import { ICategory } from '../models/tasks.model';
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonSpinner],
   providers: [
     StorageService
-  ]
+  ],
 })
 export class HomePage {
 
   public categories = signal<ICategory[]>([]);
   public selectedCategory = signal<string | null>(null);
 
-  constructor(private storage: StorageService, private crd: ChangeDetectorRef) { }
+  constructor(private storage: StorageService, private crd: ChangeDetectorRef) {
+  }
 
   ionViewDidEnter() {
     this.storage.getCategories().then((categories) => {
       this.categories.set(categories);
-      this.crd.detectChanges();
+      this.crd.detectChanges(); // using because of segment should be updated before selectedCategory is set
       this.selectedCategory.set(categories[0].id);
     }).catch((error) => {
       console.error(error);
