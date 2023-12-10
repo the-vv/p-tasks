@@ -4,3 +4,12 @@ export interface ICategory {
     color: string;
     index: number;
 }
+
+export interface ITask {
+    id: string | null;
+    name: string;
+    categoryId: string;
+    index: number;
+    isCompleted: boolean;
+    matrix: number;
+}

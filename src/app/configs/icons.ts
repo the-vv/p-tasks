@@ -6,6 +6,6 @@ import {
 
 export const setupIcons = () => {
     addIcons({
-        add, arrowForward
+        add, arrowForward,
     })
 }

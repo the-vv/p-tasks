@@ -15,8 +15,29 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div id="">
-    content
+<ion-content>
+  <div class="scroll-container overflow-x-auto w-full h-full" #matrixContainer id="matrixContainer">
+    <div class="h-[calc(200%-150px)] matrix-container grid grid-cols-2 w-[calc(200%-150px)] overflow-auto">
+      <ion-card class="{{'matrix_top_left_class' | appConfig}}" #card1 (click)="scrollIntoView(card1)" id="card1">
+        <ion-card-content>
+          check
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="{{'matrix_top_right_class' | appConfig}}" #card2 (click)="scrollIntoView(card2)">
+        <ion-card-content>
+          Here's a small text description for the card content. Nothing more, nothing less.
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="{{'matrix_bottom_left_class' | appConfig}}" #card3 (click)="scrollIntoView(card3)">
+        <ion-card-content>
+          Here's a small text description for the card content. Nothing more, nothing less.
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="{{'matrix_bottom_right_class' | appConfig}}" #card4 (click)="scrollIntoView(card4)">
+        <ion-card-content>
+          Here's a small text description for the card content. Nothing more, nothing less.
+        </ion-card-content>
+      </ion-card>
+    </div>
   </div>
 </ion-content>

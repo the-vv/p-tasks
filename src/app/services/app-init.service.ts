@@ -3,7 +3,7 @@ import { StorageService } from './storage.service';
 import { setupIcons } from '../configs/icons';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppInitService {
 
