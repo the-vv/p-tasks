@@ -23,6 +23,9 @@ export class HomePage implements AfterViewInit {
   @ViewChildren(IonCard, { read: ElementRef }) cards!: QueryList<ElementRef<HTMLIonCardElement>>;
   private categoriesAnimationPlayed = false;
 
+  // creation part
+  protected creationSelectedGridIndex: number | null = null;
+
   public categories = signal<ICategory[]>([]);
   public selectedCategory = signal<string | null>(null);
   public matrixLists: {
@@ -88,7 +91,7 @@ export class HomePage implements AfterViewInit {
       case 3:
         return 'translate(10px, 10px) scale(0.9)';
       default:
-        return 'translateY(10px, 10px) scale(0.9)';        
+        return 'translateY(10px, 10px) scale(0.9)';
     }
   }
 
