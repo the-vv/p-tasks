@@ -1,16 +1,16 @@
 <ion-header>
-  <ion-toolbar class="custom-toolbar-with-segment">
+  <ion-toolbar>
       <ion-title class="">Task Matrix</ion-title>
   </ion-toolbar>
-  <ion-toolbar class="-mt-1">
-    <ion-segment class="custom-header-segment" [scrollable]="true" (ionChange)="segmentChanged($event)"
+  <ion-toolbar class="-mt-1 overflow-hidden">
+    <ion-segment class="custom-header-segment overflow-hidden" [scrollable]="true" (ionChange)="segmentChanged($event)"
       [value]="selectedCategory()">
       @for (item of categories(); track item.id) {
-      <ion-segment-button [value]="item.id">
+      <ion-segment-button [value]="item.id" class="opacity-0">
         <ion-label>{{item.name}}</ion-label>
       </ion-segment-button>
       }
-      <ion-segment-button [value]="null" layout="icon-end">
+      <ion-segment-button [value]="null" layout="icon-end" class="opacity-0">
         <ion-label>Add Matrix</ion-label>
         <ion-icon name="add"></ion-icon>
       </ion-segment-button>
@@ -21,7 +21,7 @@
 <ion-content class="relative">
   <div class="scroll-container overflow-x-auto w-full h-full" #matrixContainer id="matrixContainer">
     <div [ngClass]="'h-[calc(200%-100px-100px)]'" class="matrix-container grid grid-cols-2 w-[calc(200%-150px)] overflow-auto">
-      <ion-card class="{{'matrix_top_left_class' | appConfig}}" #card1 (click)="scrollIntoView(card1)" id="card1">
+      <ion-card class="{{'matrix_top_left_class' | appConfig}} opacity-0" #card1 (click)="scrollIntoView(card1)" id="card1">
         <ion-card-content class="h-full w-full">
           @for (item of matrixLists[0]; track item.id) {
 
@@ -33,7 +33,7 @@
           }
         </ion-card-content>
       </ion-card>
-      <ion-card class="{{'matrix_top_right_class' | appConfig}}" #card2 (click)="scrollIntoView(card2)">
+      <ion-card class="{{'matrix_top_right_class' | appConfig}} opacity-0" #card2 (click)="scrollIntoView(card2)">
         <ion-card-content class="h-full w-full">
           @for (item of matrixLists[1]; track item.id) {
 
@@ -46,7 +46,7 @@
           }
         </ion-card-content>
       </ion-card>
-      <ion-card class="{{'matrix_bottom_left_class' | appConfig}}" #card3 (click)="scrollIntoView(card3)">
+      <ion-card class="{{'matrix_bottom_left_class' | appConfig}} opacity-0" #card3 (click)="scrollIntoView(card3)">
         <ion-card-content class="h-full w-full">
           @for (item of matrixLists[2]; track item.id) {
 
@@ -59,7 +59,7 @@
           }
         </ion-card-content>
       </ion-card>
-      <ion-card class="{{'matrix_bottom_right_class' | appConfig}}" #card4 (click)="scrollIntoView(card4)">
+      <ion-card class="{{'matrix_bottom_right_class' | appConfig}} opacity-0" #card4 (click)="scrollIntoView(card4)">
         <ion-card-content class="h-full w-full">
           @for (item of matrixLists[3]; track item.id) {
 

@@ -1,9 +1,10 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild, effect, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, QueryList, ViewChild, ViewChildren, effect, signal } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { ICategory } from '../../models/tasks.model';
-import { IonicModule } from '@ionic/angular';
+import { IonCard, IonSegmentButton, IonicModule } from '@ionic/angular';
 import { AppConfigPipe } from 'src/app/pipes/app-config.pipe';
 import { CommonModule } from '@angular/common';
+import { AnimationController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-home',
@@ -18,22 +19,42 @@ import { CommonModule } from '@angular/common';
 export class HomePage implements AfterViewInit {
 
   @ViewChild('matrixContainer', { read: ElementRef }) matrixContainer!: ElementRef<HTMLDivElement>;
+  @ViewChildren(IonSegmentButton, { read: ElementRef }) segmentButtons!: QueryList<ElementRef<HTMLIonCardElement>>;
+  @ViewChildren(IonCard, { read: ElementRef }) cards!: QueryList<ElementRef<HTMLIonCardElement>>;
+  private categoriesAnimationPlayed = false;
 
   public categories = signal<ICategory[]>([]);
   public selectedCategory = signal<string | null>(null);
   public matrixLists: {
     [key: number]: ICategory[]
   } = {
-    0: [],
-    1: [],
-    2: [],
-    3: [],
-  }
+      0: [],
+      1: [],
+      2: [],
+      3: [],
+    }
 
-  constructor(private storage: StorageService, private crd: ChangeDetectorRef) {
+  constructor(private storage: StorageService, private crd: ChangeDetectorRef, private animationCtrl: AnimationController) {
     effect(() => {
       console.log(this.selectedCategory());
-    }, { allowSignalWrites: true })
+    }, { allowSignalWrites: true });
+
+    effect(() => {
+      if (this.categories().length > 0 && !this.categoriesAnimationPlayed) {
+        this.segmentButtons.forEach((card, index) => {
+          this.animationCtrl.create()
+            .addElement(card.nativeElement)
+            .duration(400)
+            .iterations(1)
+            .fromTo('transform', 'translateY(50px) scale(0.9)', 'translateY(0px) scale(1)')
+            .fromTo('opacity', '0', '1')
+            .easing('ease-out')
+            .delay((index + 1) * 50)
+            .play();
+        });
+        this.categoriesAnimationPlayed = true;
+      }
+    })
   }
 
   ngAfterViewInit(): void {
@@ -43,6 +64,32 @@ export class HomePage implements AfterViewInit {
       element.scrollLeft = (element.scrollWidth - element.clientWidth) / 2;
       element.scrollTop = (element.scrollHeight - element.clientHeight) / 2;
     });
+
+    this.cards.forEach((card, index) => {
+      this.animationCtrl.create()
+        .addElement(card.nativeElement)
+        .duration(400)
+        .iterations(1)
+        .fromTo('transform', this.getCardFromTo(index), 'translate(0px, 0px) scale(1)')
+        .fromTo('opacity', '0', '1')
+        .easing('ease-out')
+        .play();
+    })
+  }
+
+  getCardFromTo(index: number) {
+    switch (index) {
+      case 0:
+        return 'translate(-10px, -10px) scale(0.9)';
+      case 1:
+        return 'translate(10px, -10px) scale(0.9)';
+      case 2:
+        return 'translate(-10px, -10px) scale(0.9)';
+      case 3:
+        return 'translate(10px, 10px) scale(0.9)';
+      default:
+        return 'translateY(10px, 10px) scale(0.9)';        
+    }
   }
 
   ionViewDidEnter() {
