@@ -1,11 +1,8 @@
 <ion-header>
-  <ion-toolbar>
-    <div class="flex justify-between">
-      <ion-title class="py-2">Task Matrix</ion-title>
-      <!-- <ion-avatar class="mr-2">
-        <img src="assets/images/profile.png" />
-      </ion-avatar> -->
-    </div>
+  <ion-toolbar class="custom-toolbar-with-segment">
+      <ion-title class="">Task Matrix</ion-title>
+  </ion-toolbar>
+  <ion-toolbar class="-mt-1">
     <ion-segment class="custom-header-segment" [scrollable]="true" (ionChange)="segmentChanged($event)"
       [value]="selectedCategory()">
       @for (item of categories(); track item.id) {
