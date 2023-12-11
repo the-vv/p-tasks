@@ -1,5 +1,11 @@
 <ion-header>
   <ion-toolbar>
+    <div class="flex justify-between">
+      <ion-title class="py-2">Task Matrix</ion-title>
+      <!-- <ion-avatar class="mr-2">
+        <img src="assets/images/profile.png" />
+      </ion-avatar> -->
+    </div>
     <ion-segment class="custom-header-segment" [scrollable]="true" (ionChange)="segmentChanged($event)"
       [value]="selectedCategory()">
       @for (item of categories(); track item.id) {
@@ -15,9 +21,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="relative">
   <div class="scroll-container overflow-x-auto w-full h-full" #matrixContainer id="matrixContainer">
-    <div class="h-[calc(200%-150px-112px)] matrix-container grid grid-cols-2 w-[calc(200%-150px)] overflow-auto">
+    <div [ngClass]="'h-[calc(200%-100px-100px)]'" class="matrix-container grid grid-cols-2 w-[calc(200%-150px)] overflow-auto">
       <ion-card class="{{'matrix_top_left_class' | appConfig}}" #card1 (click)="scrollIntoView(card1)" id="card1">
         <ion-card-content class="h-full w-full">
           @for (item of matrixLists[0]; track item.id) {
