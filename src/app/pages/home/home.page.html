@@ -20,63 +20,92 @@
 
 <ion-content class="relative">
   <div class="scroll-container overflow-x-auto w-full h-full" #matrixContainer id="matrixContainer">
-    <div [ngClass]="'h-[calc(200%-100px-100px)]'"
-      class="matrix-container grid grid-cols-2 w-[calc(200%-150px)] overflow-auto">
+    <div [ngClass]="'h-[calc(200%-100px-50px)]'"
+      class="matrix-container grid grid-cols-2 grid-rows-2 w-[calc(200%-150px)] overflow-auto">
       <ion-card class="{{'matrix_top_left_class' | appConfig}} opacity-0" #card1 (click)="scrollIntoView(card1)"
         id="card1">
         <ion-card-content class="h-full w-full">
-          @for (item of matrixLists[0]; track item.id) {
-
-          } @empty {
-          <div class="flex items-center justify-center h-full w-full flex-col">
-            <span class="text-3xl text-center">Do First</span>
-            <span class="text-center text=2xl mt-6">These are the tasks that you need to focus on immediately.</span>
-          </div>
-          }
+          <ion-list class="h-full overflow-auto">
+            @if (matrixLists[0].length) {
+            <ion-list-header>
+              <ion-label>Do First</ion-label>
+            </ion-list-header>
+            }
+            @for (item of matrixLists[0]; track item.id) {
+            <app-task-item [task]="item"></app-task-item>
+            } @empty {
+            <div class="flex items-center justify-center h-full w-full flex-col">
+              <span class="text-3xl text-center">Do First</span>
+              <span class="text-center text=2xl mt-6">These are the tasks that you need to focus on immediately.</span>
+            </div>
+            }
+          </ion-list>
         </ion-card-content>
       </ion-card>
       <ion-card class="{{'matrix_top_right_class' | appConfig}} opacity-0" #card2 (click)="scrollIntoView(card2)">
         <ion-card-content class="h-full w-full">
-          @for (item of matrixLists[1]; track item.id) {
-
-          } @empty {
-          <div class="flex items-center justify-center h-full w-full flex-col">
-            <span class="text-3xl text-center">Schedule</span>
-            <span class="text-center text=2xl mt-6">These are the tasks that are important but do not have a deadline
-              that is approaching soon.</span>
-          </div>
-          }
+          <ion-list class="h-full overflow-auto">
+            @if (matrixLists[1].length) {
+            <ion-list-header>
+              <ion-label>Schedule</ion-label>
+            </ion-list-header>
+            }
+            @for (item of matrixLists[1]; track item.id) {
+            <app-task-item [task]="item"></app-task-item>
+            } @empty {
+            <div class="flex items-center justify-center h-full w-full flex-col">
+              <span class="text-3xl text-center">Schedule</span>
+              <span class="text-center text=2xl mt-6">These are the tasks that are important but do not have a deadline
+                that is approaching soon.</span>
+            </div>
+            }
+          </ion-list>
         </ion-card-content>
       </ion-card>
       <ion-card class="{{'matrix_bottom_left_class' | appConfig}} opacity-0" #card3 (click)="scrollIntoView(card3)">
         <ion-card-content class="h-full w-full">
-          @for (item of matrixLists[2]; track item.id) {
-
-          } @empty {
-          <div class="flex items-center justify-center h-full w-full flex-col">
-            <span class="text-3xl text-center">Delegate</span>
-            <span class="text-center text=2xl mt-6">These are the tasks that are not important but do have a deadline
-              that is approaching soon.</span>
-          </div>
-          }
+          <ion-list class="h-full overflow-auto">
+            @if (matrixLists[2].length) {
+            <ion-list-header>
+              <ion-label>Delegate</ion-label>
+            </ion-list-header>
+            }
+            @for (item of matrixLists[2]; track item.id) {
+            <app-task-item [task]="item"></app-task-item>
+            } @empty {
+            <div class="flex items-center justify-center h-full w-full flex-col">
+              <span class="text-3xl text-center">Delegate</span>
+              <span class="text-center text=2xl mt-6">These are the tasks that are not important but do have a deadline
+                that is approaching soon.</span>
+            </div>
+            }
+          </ion-list>
         </ion-card-content>
       </ion-card>
       <ion-card class="{{'matrix_bottom_right_class' | appConfig}} opacity-0" #card4 (click)="scrollIntoView(card4)">
         <ion-card-content class="h-full w-full">
-          @for (item of matrixLists[3]; track item.id) {
-
-          } @empty {
-          <div class="flex items-center justify-center h-full w-full flex-col">
-            <span class="text-3xl text-center">Eliminate</span>
-            <span class="text-center text=2xl mt-6">These are the tasks that are neither important nor urgent.</span>
-          </div>
-          }
+          <ion-list class="h-full overflow-auto">
+            @if (matrixLists[3].length) {
+            <ion-list-header>
+              <ion-label>Eliminate</ion-label>
+            </ion-list-header>
+            }
+            @for (item of matrixLists[3]; track item.id) {
+            <app-task-item [task]="item"></app-task-item>
+            } @empty {
+            <div class="flex items-center justify-center h-full w-full flex-col">
+              <span class="text-3xl text-center">Eliminate</span>
+              <span class="text-center text=2xl mt-6">These are the tasks that are neither important nor urgent.</span>
+            </div>
+            }
+          </ion-list>
         </ion-card-content>
       </ion-card>
     </div>
   </div>
 
-  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5]" (didDismiss)="onModalClosed($event)">
+  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5]"
+    (didDismiss)="onModalClosed($event)">
     <ng-template>
       <app-create-task class="h-full" [modelRef]="modal" [categoryId]="selectedCategory()!"></app-create-task>
     </ng-template>

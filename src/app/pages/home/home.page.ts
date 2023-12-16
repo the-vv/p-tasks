@@ -6,13 +6,20 @@ import { AppConfigPipe } from 'src/app/pipes/app-config.pipe';
 import { CommonModule } from '@angular/common';
 import { AnimationController } from '@ionic/angular/standalone';
 import { CreateTaskComponent } from '../../components/create-task/create-task.component';
+import { TaskItemComponent } from 'src/app/components/task-item/task-item.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule, AppConfigPipe, CommonModule, CreateTaskComponent],
+  imports: [
+    IonicModule,
+    AppConfigPipe,
+    CommonModule,
+    CreateTaskComponent,
+    TaskItemComponent
+  ],
   providers: [
     StorageService
   ],
@@ -25,11 +32,17 @@ export class HomePage implements AfterViewInit {
   private categoriesAnimationPlayed = false;
   public categories = signal<ICategory[]>([]);
   public selectedCategory = signal<string | null>(null);
-  public matrixLists: { [key: number]: ITask[] } = {
+  public matrixLists: { [key: number]: ITask[]; reset: () => void } = {
     0: [],
     1: [],
     2: [],
     3: [],
+    reset() {
+      this[0] = [];
+      this[1] = [];
+      this[2] = [];
+      this[3] = [];
+    }
   };
 
   constructor(
@@ -114,26 +127,14 @@ export class HomePage implements AfterViewInit {
 
   public onModalClosed(event: any) {
     if (event.detail.data) {
-      this.storage.getCategories().then((categories) => {
-        console.log(categories);
-        this.categories.set(categories);
-      }).catch((error) => {
-        console.error(error);
-        // TODO show toast
-      });
+      this.getTasks();
     }
   }
 
   private getTasks() {
     this.storage.getTasks(this.selectedCategory()!)
       .then((tasks) => {
-        console.log(tasks)
-        this.matrixLists = {
-          0: [],
-          1: [],
-          2: [],
-          3: [],
-        };
+        this.matrixLists.reset();
         tasks.forEach((task) => {
           this.matrixLists[task.matrix].push(task);
         });
