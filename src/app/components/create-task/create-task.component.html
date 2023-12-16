@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Create Task</ion-title>
+    <ion-button color="primary" slot="end" (click)="onCreate()">
+      Create
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <!-- design  grid design so that user chan choose which card the task should display -->
+  <div class="flex justify-center mt-4 flex-col items-center">
+    <ion-label class="text-xl">Choose a priority</ion-label>
+    <div class="grid-choser h-32 w-36 grid grid-cols-2 gap-2 mt-3">
+      <div (click)="creationSelectedGridIndex = 0"
+        [ngClass]="creationSelectedGridIndex === 0 ? 'bg-green-700' : 'bg-blue-700'"
+        class="h-16 flex items-center justify-center text-xs text-center break-all transition-all active:scale-95 rounded-md"
+        tabindex="0" (click)="creationSelectedGridIndex = 0">Do First</div>
+      <div (click)="creationSelectedGridIndex = 1"
+        [ngClass]="creationSelectedGridIndex === 1 ? 'bg-green-700' : 'bg-blue-700'"
+        class="h-16 flex items-center justify-center text-xs text-center break-all transition-all active:scale-95 rounded-md"
+        tabindex="0" (click)="creationSelectedGridIndex = 1">Schedule</div>
+      <div (click)="creationSelectedGridIndex = 2"
+        [ngClass]="creationSelectedGridIndex === 2 ? 'bg-green-700' : 'bg-blue-700'"
+        class="h-16 flex items-center justify-center text-xs text-center break-all transition-all active:scale-95 rounded-md"
+        tabindex="0" (click)="creationSelectedGridIndex = 2">Delegate</div>
+      <div (click)="creationSelectedGridIndex = 3"
+        [ngClass]="creationSelectedGridIndex === 3 ? 'bg-green-700' : 'bg-blue-700'"
+        class="h-16 flex items-center justify-center text-xs text-center break-all transition-all active:scale-95 rounded-md"
+        tabindex="0" (click)="creationSelectedGridIndex = 3">Eliminate</div>
+    </div>
+  </div>
+  <ion-item class="mt-8">
+    <ion-input label="Task Name" placeholder="Enter Task Name" labelPlacement="stacked"
+      [formControl]="taskNameControl"></ion-input>
+  </ion-item>
+  @if (showValidation) {
+  <div class="border-red-500 rounded-md p-2 border text-red-500 mx-3 mt-6">
+    Choose a priority and enter a task name
+  </div>
+  }
+</ion-content>

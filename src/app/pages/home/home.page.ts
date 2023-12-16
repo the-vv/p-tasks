@@ -1,17 +1,18 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, QueryList, ViewChild, ViewChildren, effect, signal } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
-import { ICategory } from '../../models/tasks.model';
+import { ICategory, ITask } from '../../models/tasks.model';
 import { IonCard, IonSegmentButton, IonicModule } from '@ionic/angular';
 import { AppConfigPipe } from 'src/app/pipes/app-config.pipe';
 import { CommonModule } from '@angular/common';
 import { AnimationController } from '@ionic/angular/standalone';
+import { CreateTaskComponent } from '../../components/create-task/create-task.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule, AppConfigPipe, CommonModule],
+  imports: [IonicModule, AppConfigPipe, CommonModule, CreateTaskComponent],
   providers: [
     StorageService
   ],
@@ -22,26 +23,20 @@ export class HomePage implements AfterViewInit {
   @ViewChildren(IonSegmentButton, { read: ElementRef }) segmentButtons!: QueryList<ElementRef<HTMLIonCardElement>>;
   @ViewChildren(IonCard, { read: ElementRef }) cards!: QueryList<ElementRef<HTMLIonCardElement>>;
   private categoriesAnimationPlayed = false;
-
-  // creation part
-  protected creationSelectedGridIndex: number | null = null;
-
   public categories = signal<ICategory[]>([]);
   public selectedCategory = signal<string | null>(null);
-  public matrixLists: {
-    [key: number]: ICategory[]
-  } = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-    }
+  public matrixLists: { [key: number]: ITask[] } = {
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+  };
 
-  constructor(private storage: StorageService, private crd: ChangeDetectorRef, private animationCtrl: AnimationController) {
-    effect(() => {
-      console.log(this.selectedCategory());
-    }, { allowSignalWrites: true });
-
+  constructor(
+    private storage: StorageService,
+    private crd: ChangeDetectorRef,
+    private animationCtrl: AnimationController
+  ) {
     effect(() => {
       if (this.categories().length > 0 && !this.categoriesAnimationPlayed) {
         this.segmentButtons.forEach((card, index) => {
@@ -100,6 +95,7 @@ export class HomePage implements AfterViewInit {
       this.categories.set(categories);
       this.crd.detectChanges(); // using because of segment should be updated before selectedCategory is set
       this.selectedCategory.set(categories[0].id);
+      this.getTasks();
     }).catch((error) => {
       console.error(error);
       // TODO show toast
@@ -116,17 +112,35 @@ export class HomePage implements AfterViewInit {
     }
   }
 
-  public getVisibleDimensions(divId: string) {
-    const element = document.getElementById(divId);
-    if (element) {
-      const rect = element.getBoundingClientRect();
-      // Calculate visible dimensions by subtracting the area outside the viewport
-      const visibleWidth = Math.min(rect.right, window.innerWidth) - Math.max(rect.left, 0);
-      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
-      return { visibleWidth, visibleHeight };
+  public onModalClosed(event: any) {
+    if (event.detail.data) {
+      this.storage.getCategories().then((categories) => {
+        console.log(categories);
+        this.categories.set(categories);
+      }).catch((error) => {
+        console.error(error);
+        // TODO show toast
+      });
     }
-    return null;
   }
 
+  private getTasks() {
+    this.storage.getTasks(this.selectedCategory()!)
+      .then((tasks) => {
+        console.log(tasks)
+        this.matrixLists = {
+          0: [],
+          1: [],
+          2: [],
+          3: [],
+        };
+        tasks.forEach((task) => {
+          this.matrixLists[task.matrix].push(task);
+        });
+      }).catch((error) => {
+        console.error(error);
+        // TODO show toast
+      });
+  }
 
 }

@@ -76,36 +76,9 @@
     </div>
   </div>
 
-  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5]">
+  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5]" (didDismiss)="onModalClosed($event)">
     <ng-template>
-      <ion-content>
-        <!-- design  grid design so that user chan choose which card the task should display -->
-        <div class="flex justify-center mt-4 flex-col items-center">
-          <ion-label class="text-2xl">Choose a card</ion-label>
-          <div class="grid-choser h-32 w-36 grid grid-cols-2 gap-2 mt-3">
-            <div (click)="creationSelectedGridIndex = 0"
-              [ngClass]="creationSelectedGridIndex === 0 ? 'bg-green-700' : 'bg-blue-700'"
-              class="h-16 flex items-center justify-center text-xs text-center break-all transition-all active:scale-95"
-              tabindex="0">Do First</div>
-            <div (click)="creationSelectedGridIndex = 1"
-              [ngClass]="creationSelectedGridIndex === 1 ? 'bg-green-700' : 'bg-blue-700'"
-              class="h-16 flex items-center justify-center text-xs text-center break-all transition-all active:scale-95"
-              tabindex="0">Schedule</div>
-            <div (click)="creationSelectedGridIndex = 2"
-              [ngClass]="creationSelectedGridIndex === 2 ? 'bg-green-700' : 'bg-blue-700'"
-              class="h-16 flex items-center justify-center text-xs text-center break-all transition-all active:scale-95"
-              tabindex="0">Delegate</div>
-            <div (click)="creationSelectedGridIndex = 3"
-              [ngClass]="creationSelectedGridIndex === 3 ? 'bg-green-700' : 'bg-blue-700'"
-              class="h-16 flex items-center justify-center text-xs text-center break-all transition-all active:scale-95"
-              tabindex="0">Eliminate</div>
-          </div>
-        </div>
-        <ion-item class="my-8">
-          <ion-input label="Task Name" labelPlacement="floating" placeholder="Enter Task Name"></ion-input>
-        </ion-item>
-        <ion-button class="w-full m-0" id="open-modal" expand="block">Create</ion-button>
-      </ion-content>
+      <app-create-task class="h-full" [modelRef]="modal" [categoryId]="selectedCategory()!"></app-create-task>
     </ng-template>
   </ion-modal>
 </ion-content>

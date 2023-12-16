@@ -9,7 +9,7 @@ export interface ITask {
     id: string | null;
     name: string;
     categoryId: string;
-    index: number;
+    index?: number;
     isCompleted: boolean;
     matrix: number;
 }
