@@ -35,17 +35,48 @@ export class StorageService {
     })
   }
 
-  public addTask(task: ITask) {
-    this.storage.get(EStorageKeys.tasks).then((tasks) => {
+  public async addTask(task: ITask) {
+    try {
+      let tasks = await this.storage.get(EStorageKeys.tasks);
       if (!tasks) {
         tasks = [];
       }
       tasks.push(task);
       this.storage.set(EStorageKeys.tasks, tasks);
-    }).catch((error) => {
+    } catch (error) {
       console.error(error);
-      // TODO show toast
-    });
+    }
+  }
+
+  public async deleteTask(taskId: string) {
+    try {
+      let tasks: ITask[] = await this.storage.get(EStorageKeys.tasks);
+      if (!tasks) {
+        return;
+      }
+      tasks = tasks.filter((task) => task.id !== taskId);
+      this.storage.set(EStorageKeys.tasks, tasks);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public async updateTask(task: ITask) {
+    try {
+      let tasks: ITask[] = await this.storage.get(EStorageKeys.tasks);
+      if (!tasks) {
+        return;
+      }
+      tasks = tasks.map((taskItem) => {
+        if (taskItem.id === task.id) {
+          return task;
+        }
+        return taskItem;
+      });
+      this.storage.set(EStorageKeys.tasks, tasks);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   public getTasks(categoryId: string): Promise<ITask[]> {

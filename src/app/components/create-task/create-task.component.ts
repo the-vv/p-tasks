@@ -7,6 +7,7 @@ import { IonModal } from '@ionic/angular/common';
 import { StorageService } from 'src/app/services/storage.service';
 import { v4 as uuidv4 } from 'uuid';
 import { Capacitor } from "@capacitor/core";
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-create-task',
@@ -24,7 +25,8 @@ export class CreateTaskComponent implements OnInit, OnDestroy {
   public taskNameControl = new FormControl<string>('', Validators.required);
 
   constructor(
-    private storageService: StorageService
+    private storageService: StorageService,
+    private commonService: CommonService
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +58,9 @@ export class CreateTaskComponent implements OnInit, OnDestroy {
       isCompleted: false,
       matrix: this.creationSelectedGridIndex,
       createdAt: Date.now()
-    });
+    }).then(() => {
+      this.commonService.showToast('Task created successfully');
+    })
     this.modelRef.dismiss(true);
   }
 

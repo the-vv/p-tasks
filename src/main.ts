@@ -10,6 +10,9 @@ import { AppInitService } from './app/services/app-init.service';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { StorageService } from './app/services/storage.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+
+defineCustomElements(window); // for capacitor
 
 if (environment.production) {
   enableProdMode();

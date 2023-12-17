@@ -4,10 +4,11 @@ import { ICategory, ITask } from '../../models/tasks.model';
 import { IonCard, IonModal, IonSegmentButton, IonicModule } from '@ionic/angular';
 import { AppConfigPipe } from 'src/app/pipes/app-config.pipe';
 import { CommonModule } from '@angular/common';
-import { AnimationController } from '@ionic/angular/standalone';
+import { AlertController, AnimationController } from '@ionic/angular/standalone';
 import { CreateTaskComponent } from '../../components/create-task/create-task.component';
 import { TaskItemComponent } from 'src/app/components/task-item/task-item.component';
 import { slideUpDownAnimation } from '../../configs/animations';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-home',
@@ -54,7 +55,9 @@ export class HomePage implements AfterViewInit {
   constructor(
     private storage: StorageService,
     private crd: ChangeDetectorRef,
-    private animationCtrl: AnimationController
+    private animationCtrl: AnimationController,
+    private alertController: AlertController,
+    private commonService: CommonService
   ) {
     effect(() => {
       if (this.categories().length > 0 && !this.categoriesAnimationPlayed) {
@@ -75,7 +78,7 @@ export class HomePage implements AfterViewInit {
     effect(() => {
       console.log(this.selectedTask())
       if (this.selectedTask()) {
-        this.taskDetailModel.present();        
+        this.taskDetailModel.present();
       }
     })
   }
@@ -160,8 +163,29 @@ export class HomePage implements AfterViewInit {
     this.selectedTask.set(null);
   }
 
-  public onDeleteTask(id: string) {
-
+  public async onDeleteTask(id: string) {
+    const alert = await this.alertController.create({
+      header: 'Confirmation!',
+      message: 'Are you sure you want to delete this task?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Delete',
+          cssClass: 'alert-delete-button',
+          handler: () => {
+            this.storage.deleteTask(id).then(() => {
+              this.taskDetailModel.dismiss();
+              this.getTasks();
+              this.commonService.showToast('Task deleted successfully');
+            })
+          }
+        }
+      ],
+    });
+    await alert.present();
   }
 
   public onEditTask(id: string) {
