@@ -3,7 +3,7 @@
     <ion-title class="">Task Matrix</ion-title>
   </ion-toolbar>
   <ion-toolbar class="-mt-1 overflow-hidden">
-    <ion-segment class="custom-header-segment overflow-hidden" [scrollable]="true" (ionChange)="segmentChanged($event)"
+    <ion-segment class="custom-header-segment overflow-y-clip" [scrollable]="true" (ionChange)="segmentChanged($event)"
       [value]="selectedCategory()">
       @for (item of categories(); track item.id) {
       <ion-segment-button [value]="item.id" class="opacity-0">
@@ -18,13 +18,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="relative transition-all">
+<ion-content class="relative">
   <div class="scroll-container overflow-x-auto w-full h-full" #matrixContainer id="matrixContainer">
     <div [ngClass]="'h-[calc(200%-100px-50px)]'"
       class="matrix-container grid grid-cols-2 grid-rows-2 w-[calc(200%-150px)] overflow-auto">
-      <ion-card class="{{'matrix_top_left_class' | appConfig}} opacity-0" #card1 (click)="scrollIntoView(card1)"
+      <ion-card class="{{'matrix_top_left_class' | appConfig}} opacity-0 relative" #card1 (click)="scrollIntoView(card1)"
         id="card1">
         <ion-card-content class="h-full w-full">
+          <ion-badge class="absolute bottom-2 right-2 z-10" *ngIf="matrixLists[0].length">{{matrixLists[0].length}}</ion-badge>
           <ion-list class="h-full overflow-auto">
             @if (matrixLists[0].length) {
             <ion-list-header>
@@ -32,7 +33,7 @@
             </ion-list-header>
             }
             @for (item of matrixLists[0]; track item.id) {
-            <app-task-item [task]="item" (click)="selectedTask.set(item)"></app-task-item>
+            <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
             } @empty {
             <div class="flex items-center justify-center h-full w-full flex-col">
               <span class="text-3xl text-center">Do First</span>
@@ -43,6 +44,7 @@
         </ion-card-content>
       </ion-card>
       <ion-card class="{{'matrix_top_right_class' | appConfig}} opacity-0" #card2 (click)="scrollIntoView(card2)">
+        <ion-badge class="absolute bottom-2 left-2 z-10" *ngIf="matrixLists[1].length">{{matrixLists[1].length}}</ion-badge>
         <ion-card-content class="h-full w-full">
           <ion-list class="h-full overflow-auto">
             @if (matrixLists[1].length) {
@@ -51,7 +53,7 @@
             </ion-list-header>
             }
             @for (item of matrixLists[1]; track item.id) {
-            <app-task-item [task]="item" (click)="selectedTask.set(item)"></app-task-item>
+            <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
             } @empty {
             <div class="flex items-center justify-center h-full w-full flex-col">
               <span class="text-3xl text-center">Schedule</span>
@@ -63,6 +65,7 @@
         </ion-card-content>
       </ion-card>
       <ion-card class="{{'matrix_bottom_left_class' | appConfig}} opacity-0" #card3 (click)="scrollIntoView(card3)">
+        <ion-badge class="absolute top-2 right-2 z-10" *ngIf="matrixLists[2].length">{{matrixLists[2].length}}</ion-badge>
         <ion-card-content class="h-full w-full">
           <ion-list class="h-full overflow-auto">
             @if (matrixLists[2].length) {
@@ -71,7 +74,7 @@
             </ion-list-header>
             }
             @for (item of matrixLists[2]; track item.id) {
-            <app-task-item [task]="item" (click)="selectedTask.set(item)"></app-task-item>
+            <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
             } @empty {
             <div class="flex items-center justify-center h-full w-full flex-col">
               <span class="text-3xl text-center">Delegate</span>
@@ -83,6 +86,7 @@
         </ion-card-content>
       </ion-card>
       <ion-card class="{{'matrix_bottom_right_class' | appConfig}} opacity-0" #card4 (click)="scrollIntoView(card4)">
+        <ion-badge class="absolute top-2 left-2 z-10" *ngIf="matrixLists[3].length">{{matrixLists[3].length}}</ion-badge>
         <ion-card-content class="h-full w-full">
           <ion-list class="h-full overflow-auto">
             @if (matrixLists[3].length) {
@@ -91,7 +95,7 @@
             </ion-list-header>
             }
             @for (item of matrixLists[3]; track item.id) {
-            <app-task-item [task]="item" (click)="selectedTask.set(item)"></app-task-item>
+            <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
             } @empty {
             <div class="flex items-center justify-center h-full w-full flex-col">
               <span class="text-3xl text-center">Eliminate</span>

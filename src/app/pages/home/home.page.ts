@@ -33,6 +33,7 @@ export class HomePage implements AfterViewInit {
 
   @ViewChild('taskDetailModel') taskDetailModel!: IonModal;
   @ViewChild('taskCreateEditModel') taskCreateEditModel!: IonModal;
+  @ViewChildren('taskItem', { read: ElementRef }) taskItems!: QueryList<ElementRef>;
   @ViewChild('matrixContainer', { read: ElementRef }) matrixContainer!: ElementRef<HTMLDivElement>;
   @ViewChildren(IonSegmentButton, { read: ElementRef }) segmentButtons!: QueryList<ElementRef<HTMLIonCardElement>>;
   @ViewChildren(IonCard, { read: ElementRef }) cards!: QueryList<ElementRef<HTMLIonCardElement>>;
@@ -78,10 +79,36 @@ export class HomePage implements AfterViewInit {
       }
     });
     effect(() => {
-      console.log(this.selectedTask())
       if (this.selectedTask()) {
         this.taskDetailModel.present();
       }
+    })
+  }
+
+  private async playMatrixAnimation() {
+    await Promise.all(this.cards.map((card, index) => {
+      return this.animationCtrl.create()
+        .addElement(card.nativeElement)
+        .duration(400)
+        .iterations(1)
+        .fromTo('transform', this.getCardFromTo(index), 'translate(0px, 0px) scale(1)')
+        .fromTo('opacity', '0', '1')
+        .easing('ease-out')
+        .play();
+    }));
+  }
+
+  playTaskItemsAnimation() {
+    this.taskItems.forEach((taskItem, index) => {
+      this.animationCtrl.create()
+        .addElement(taskItem.nativeElement)
+        .duration(100)
+        .iterations(1)
+        .fromTo('transform', 'scale(0.9)', 'scale(1)')
+        .fromTo('opacity', '0', '1')
+        .easing('ease-out')
+        .delay((index + 1) * 20)
+        .play();
     })
   }
 
@@ -93,16 +120,7 @@ export class HomePage implements AfterViewInit {
       element.scrollTop = (element.scrollHeight - element.clientHeight) / 2;
     });
 
-    this.cards.forEach((card, index) => {
-      this.animationCtrl.create()
-        .addElement(card.nativeElement)
-        .duration(400)
-        .iterations(1)
-        .fromTo('transform', this.getCardFromTo(index), 'translate(0px, 0px) scale(1)')
-        .fromTo('opacity', '0', '1')
-        .easing('ease-out')
-        .play();
-    })
+    this.playMatrixAnimation();
   }
 
   getCardFromTo(index: number) {
@@ -156,6 +174,9 @@ export class HomePage implements AfterViewInit {
         this.matrixLists.reset();
         tasks.forEach((task) => {
           this.matrixLists[task.matrix].push(task);
+        });
+        setTimeout(() => {
+          this.playTaskItemsAnimation();
         });
       }).catch((error) => {
         console.error(error);
