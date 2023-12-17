@@ -19,101 +19,116 @@
 </ion-header>
 
 <ion-content class="relative">
-  <div class="scroll-container overflow-x-auto w-full h-full" #matrixContainer id="matrixContainer">
-    <div [ngClass]="'h-[calc(200%-100px-50px)]'"
-      class="matrix-container grid grid-cols-2 grid-rows-2 w-[calc(200%-150px)] overflow-auto">
-      <ion-card class="{{'matrix_top_left_class' | appConfig}} opacity-0 relative" #card1 (click)="scrollIntoView(card1)"
-        id="card1">
-        <ion-card-content class="h-full w-full">
-          <ion-badge class="absolute bottom-2 right-2 z-10" *ngIf="matrixLists[0].length">{{matrixLists[0].length}}</ion-badge>
-          <ion-list class="h-full overflow-auto">
-            @if (matrixLists[0].length) {
-            <ion-list-header>
-              <ion-label>Do First</ion-label>
-            </ion-list-header>
-            }
-            @for (item of matrixLists[0]; track item.id) {
-            <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
-            } @empty {
-            <div class="flex items-center justify-center h-full w-full flex-col">
-              <span class="text-3xl text-center">Do First</span>
-              <span class="text-center text=2xl mt-6">These are the tasks that you need to focus on immediately.</span>
-            </div>
-            }
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-      <ion-card class="{{'matrix_top_right_class' | appConfig}} opacity-0" #card2 (click)="scrollIntoView(card2)">
-        <ion-badge class="absolute bottom-2 left-2 z-10" *ngIf="matrixLists[1].length">{{matrixLists[1].length}}</ion-badge>
-        <ion-card-content class="h-full w-full">
-          <ion-list class="h-full overflow-auto">
-            @if (matrixLists[1].length) {
-            <ion-list-header>
-              <ion-label>Schedule</ion-label>
-            </ion-list-header>
-            }
-            @for (item of matrixLists[1]; track item.id) {
-            <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
-            } @empty {
-            <div class="flex items-center justify-center h-full w-full flex-col">
-              <span class="text-3xl text-center">Schedule</span>
-              <span class="text-center text=2xl mt-6">These are the tasks that are important but do not have a deadline
-                that is approaching soon.</span>
-            </div>
-            }
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-      <ion-card class="{{'matrix_bottom_left_class' | appConfig}} opacity-0" #card3 (click)="scrollIntoView(card3)">
-        <ion-badge class="absolute top-2 right-2 z-10" *ngIf="matrixLists[2].length">{{matrixLists[2].length}}</ion-badge>
-        <ion-card-content class="h-full w-full">
-          <ion-list class="h-full overflow-auto">
-            @if (matrixLists[2].length) {
-            <ion-list-header>
-              <ion-label>Delegate</ion-label>
-            </ion-list-header>
-            }
-            @for (item of matrixLists[2]; track item.id) {
-            <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
-            } @empty {
-            <div class="flex items-center justify-center h-full w-full flex-col">
-              <span class="text-3xl text-center">Delegate</span>
-              <span class="text-center text=2xl mt-6">These are the tasks that are not important but do have a deadline
-                that is approaching soon.</span>
-            </div>
-            }
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-      <ion-card class="{{'matrix_bottom_right_class' | appConfig}} opacity-0" #card4 (click)="scrollIntoView(card4)">
-        <ion-badge class="absolute top-2 left-2 z-10" *ngIf="matrixLists[3].length">{{matrixLists[3].length}}</ion-badge>
-        <ion-card-content class="h-full w-full">
-          <ion-list class="h-full overflow-auto">
-            @if (matrixLists[3].length) {
-            <ion-list-header>
-              <ion-label>Eliminate</ion-label>
-            </ion-list-header>
-            }
-            @for (item of matrixLists[3]; track item.id) {
-            <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
-            } @empty {
-            <div class="flex items-center justify-center h-full w-full flex-col">
-              <span class="text-3xl text-center">Eliminate</span>
-              <span class="text-center text=2xl mt-6">These are the tasks that are neither important nor urgent.</span>
-            </div>
-            }
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </div>
-  </div>
+  @if (selectedCategory()) {
+    <ng-container>
+      <div class="scroll-container overflow-x-auto w-full h-full" #matrixContainer id="matrixContainer">
+        <div [ngClass]="'h-[calc(200%-100px-50px)]'"
+          class="matrix-container grid grid-cols-2 grid-rows-2 w-[calc(200%-150px)] overflow-auto">
+          <ion-card class="{{'matrix_top_left_class' | appConfig}} opacity-0 relative" #card1
+            (click)="scrollIntoView(card1)" id="card1">
+            <ion-card-content class="h-full w-full">
+              <ion-badge class="absolute bottom-2 right-2 z-10"
+                *ngIf="matrixLists[0].length">{{matrixLists[0].length}}</ion-badge>
+              <ion-list class="h-full overflow-auto">
+                @if (matrixLists[0].length) {
+                <ion-list-header>
+                  <ion-label>Do First</ion-label>
+                </ion-list-header>
+                }
+                @for (item of matrixLists[0]; track item.id) {
+                <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
+                } @empty {
+                <div class="flex items-center justify-center h-full w-full flex-col">
+                  <span class="text-3xl text-center">Do First</span>
+                  <span class="text-center text=2xl mt-6">These are the tasks that you need to focus on
+                    immediately.</span>
+                </div>
+                }
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="{{'matrix_top_right_class' | appConfig}} opacity-0" #card2 (click)="scrollIntoView(card2)">
+            <ion-badge class="absolute bottom-2 left-2 z-10"
+              *ngIf="matrixLists[1].length">{{matrixLists[1].length}}</ion-badge>
+            <ion-card-content class="h-full w-full">
+              <ion-list class="h-full overflow-auto">
+                @if (matrixLists[1].length) {
+                <ion-list-header>
+                  <ion-label>Schedule</ion-label>
+                </ion-list-header>
+                }
+                @for (item of matrixLists[1]; track item.id) {
+                <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
+                } @empty {
+                <div class="flex items-center justify-center h-full w-full flex-col">
+                  <span class="text-3xl text-center">Schedule</span>
+                  <span class="text-center text=2xl mt-6">These are the tasks that are important but do not have a
+                    deadline
+                    that is approaching soon.</span>
+                </div>
+                }
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="{{'matrix_bottom_left_class' | appConfig}} opacity-0" #card3 (click)="scrollIntoView(card3)">
+            <ion-badge class="absolute top-2 right-2 z-10"
+              *ngIf="matrixLists[2].length">{{matrixLists[2].length}}</ion-badge>
+            <ion-card-content class="h-full w-full">
+              <ion-list class="h-full overflow-auto">
+                @if (matrixLists[2].length) {
+                <ion-list-header>
+                  <ion-label>Delegate</ion-label>
+                </ion-list-header>
+                }
+                @for (item of matrixLists[2]; track item.id) {
+                <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
+                } @empty {
+                <div class="flex items-center justify-center h-full w-full flex-col">
+                  <span class="text-3xl text-center">Delegate</span>
+                  <span class="text-center text=2xl mt-6">These are the tasks that are not important but do have a
+                    deadline
+                    that is approaching soon.</span>
+                </div>
+                }
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="{{'matrix_bottom_right_class' | appConfig}} opacity-0" #card4 (click)="scrollIntoView(card4)">
+            <ion-badge class="absolute top-2 left-2 z-10"
+              *ngIf="matrixLists[3].length">{{matrixLists[3].length}}</ion-badge>
+            <ion-card-content class="h-full w-full">
+              <ion-list class="h-full overflow-auto">
+                @if (matrixLists[3].length) {
+                <ion-list-header>
+                  <ion-label>Eliminate</ion-label>
+                </ion-list-header>
+                }
+                @for (item of matrixLists[3]; track item.id) {
+                <app-task-item #taskItem class="opacity-0" [task]="item" (click)="selectedTask.set(item)"></app-task-item>
+                } @empty {
+                <div class="flex items-center justify-center h-full w-full flex-col">
+                  <span class="text-3xl text-center">Eliminate</span>
+                  <span class="text-center text=2xl mt-6">These are the tasks that are neither important nor
+                    urgent.</span>
+                </div>
+                }
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+  
+      <ion-modal #taskCreateEditModel trigger="open-modal" [initialBreakpoint]="0.6" [breakpoints]="[0, 0.6, 1]"
+        (didDismiss)="onModalClosed($event)" (didPresent)="isEditingTask.set(true)">
+        <ng-template>
+          <app-create-task class="h-full" [modelRef]="taskCreateEditModel" [categoryId]="selectedCategory()!"
+            [task]="selectedTask()"></app-create-task>
+        </ng-template>
+      </ion-modal>
+    </ng-container>
+  } @else {
 
-  <ion-modal #taskCreateEditModel trigger="open-modal" [initialBreakpoint]="0.6" [breakpoints]="[0, 0.6, 1]"
-    (didDismiss)="onModalClosed($event)" (didPresent)="isEditingTask.set(true)">
-    <ng-template>
-      <app-create-task class="h-full" [modelRef]="taskCreateEditModel" [categoryId]="selectedCategory()!" [task]="selectedTask()"></app-create-task>
-    </ng-template>
-  </ion-modal>
+  }
 </ion-content>
 
 <ion-footer @slideUpDown class="transition-all" [translucent]="true">
@@ -121,8 +136,8 @@
 </ion-footer>
 
 
-<ion-modal #taskDetailModel [initialBreakpoint]="1" [breakpoints]="[0, 1]" [handle]="false"
-  style="--height: auto" (didDismiss)="!isEditingTask() && selectedTask.set(null)">
+<ion-modal #taskDetailModel [initialBreakpoint]="1" [breakpoints]="[0, 1]" [handle]="false" style="--height: auto"
+  (didDismiss)="!isEditingTask() && selectedTask.set(null)">
   <ng-template>
     <ion-toolbar>
       <ion-title>Task Details</ion-title>
@@ -139,19 +154,19 @@
             <span class="ml-2">{{selectedTask()?.createdAt | date: 'medium'}}</span>
           </div>
         </div>
-          <div class="flex gap-2 justify-between">
-            <ion-button color="primary" size="small" fill="outline" (click)="onTaskCompleted(selectedTask()?.id!)">
-              Mark As Done
+        <div class="flex gap-2 justify-between">
+          <ion-button color="primary" size="small" fill="outline" (click)="onTaskCompleted(selectedTask()?.id!)">
+            Mark As Done
+          </ion-button>
+          <div class="flex gap-2">
+            <ion-button color="warning" size="small" fill="outline" (click)="onEditTask()">
+              Edit
             </ion-button>
-            <div class="flex gap-2">
-              <ion-button color="warning" size="small" fill="outline" (click)="onEditTask()">
-                Edit
-              </ion-button>
-              <ion-button color="danger" size="small" fill="outline" (click)="onDeleteTask(selectedTask()?.id!)">
-                Delete
-              </ion-button>
-            </div>
+            <ion-button color="danger" size="small" fill="outline" (click)="onDeleteTask(selectedTask()?.id!)">
+              Delete
+            </ion-button>
           </div>
+        </div>
       </div>
     </ion-item>
   </ng-template>

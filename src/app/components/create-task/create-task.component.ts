@@ -62,7 +62,7 @@ export class CreateTaskComponent implements OnInit, OnDestroy {
         this.validationMessages = 'Enter task name';
       }
       if (this.creationSelectedGridIndex === null) {
-        this.validationMessages = this.validationMessages ? `${this.validationMessages} and select priority` : 'Select priority';
+        this.validationMessages = this.validationMessages ? `${this.validationMessages} and choose priority` : 'Choose priority';
       }
       this.showValidation = true;
       return;

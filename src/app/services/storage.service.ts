@@ -78,7 +78,7 @@ export class StorageService {
       if (!tasks) {
         return;
       }
-      const taskExists = tasks.find((taskItem) => (taskItem.name === task.id && taskItem.id !== task.id && taskItem.categoryId === task.categoryId));
+      const taskExists = tasks.find((taskItem) => (taskItem.name === task.name && taskItem.id !== task.id && taskItem.categoryId === task.categoryId));
       if (taskExists) {
         this.commonService.showToast('Task already exists');
         return false;

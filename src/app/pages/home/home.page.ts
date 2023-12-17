@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, QueryList, ViewChild, ViewChildren, effect, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, QueryList, ViewChild, ViewChildren, effect, signal } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { ICategory, ITask } from '../../models/tasks.model';
 import { IonCard, IonModal, IonSegmentButton, IonicModule } from '@ionic/angular';
@@ -9,6 +9,7 @@ import { CreateTaskComponent } from '../../components/create-task/create-task.co
 import { TaskItemComponent } from 'src/app/components/task-item/task-item.component';
 import { slideUpDownAnimation } from '../../configs/animations';
 import { CommonService } from 'src/app/services/common.service';
+import { CreateCategoryComponent } from 'src/app/components/create-category/create-category.component';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,8 @@ import { CommonService } from 'src/app/services/common.service';
     AppConfigPipe,
     CommonModule,
     CreateTaskComponent,
-    TaskItemComponent
+    TaskItemComponent,
+    CreateCategoryComponent
   ],
   providers: [
     StorageService
@@ -29,7 +31,7 @@ import { CommonService } from 'src/app/services/common.service';
     slideUpDownAnimation
   ]
 })
-export class HomePage implements AfterViewInit {
+export class HomePage {
 
   @ViewChild('taskDetailModel') taskDetailModel!: IonModal;
   @ViewChild('taskCreateEditModel') taskCreateEditModel!: IonModal;
@@ -82,6 +84,14 @@ export class HomePage implements AfterViewInit {
       if (this.selectedTask()) {
         this.taskDetailModel.present();
       }
+    });
+    effect(() => {
+      if (this.selectedCategory()) {
+        setTimeout(() => {
+
+          this.matrixSetup();
+        });
+      }
     })
   }
 
@@ -112,13 +122,11 @@ export class HomePage implements AfterViewInit {
     })
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      // make sure the matrix is centered
-      const element = this.matrixContainer.nativeElement;
-      element.scrollLeft = (element.scrollWidth - element.clientWidth) / 2;
-      element.scrollTop = (element.scrollHeight - element.clientHeight) / 2;
-    });
+  private matrixSetup() {
+    // make sure the matrix is centered
+    const element = this.matrixContainer.nativeElement;
+    element.scrollLeft = (element.scrollWidth - element.clientWidth) / 2;
+    element.scrollTop = (element.scrollHeight - element.clientHeight) / 2;
 
     this.playMatrixAnimation();
   }
