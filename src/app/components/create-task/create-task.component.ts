@@ -16,6 +16,7 @@ import { Capacitor } from "@capacitor/core";
   imports: [CommonModule, IonicModule, ReactiveFormsModule],
 })
 export class CreateTaskComponent implements OnInit, OnDestroy {
+  
   @Input() public categoryId!: string;
   @Input({ required: true }) public modelRef!: IonModal;
   protected creationSelectedGridIndex: number | null = null;
@@ -32,7 +33,7 @@ export class CreateTaskComponent implements OnInit, OnDestroy {
         this.modelRef.setCurrentBreakpoint(1);
       });
       Keyboard.addListener('keyboardWillHide', () => {
-        this.modelRef.setCurrentBreakpoint(0.5);
+        this.modelRef.setCurrentBreakpoint(0.6);
       });
     }
   }
@@ -54,6 +55,7 @@ export class CreateTaskComponent implements OnInit, OnDestroy {
       categoryId: this.categoryId,
       isCompleted: false,
       matrix: this.creationSelectedGridIndex,
+      createdAt: Date.now()
     });
     this.modelRef.dismiss(true);
   }

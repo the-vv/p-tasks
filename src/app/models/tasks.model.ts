@@ -12,4 +12,5 @@ export interface ITask {
     index?: number;
     isCompleted: boolean;
     matrix: number;
+    createdAt: number;
 }

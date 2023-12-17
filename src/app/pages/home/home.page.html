@@ -18,7 +18,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="relative">
+<ion-content class="relative transition-all">
   <div class="scroll-container overflow-x-auto w-full h-full" #matrixContainer id="matrixContainer">
     <div [ngClass]="'h-[calc(200%-100px-50px)]'"
       class="matrix-container grid grid-cols-2 grid-rows-2 w-[calc(200%-150px)] overflow-auto">
@@ -32,7 +32,7 @@
             </ion-list-header>
             }
             @for (item of matrixLists[0]; track item.id) {
-            <app-task-item [task]="item"></app-task-item>
+            <app-task-item [task]="item" (click)="selectedTask.set(item)"></app-task-item>
             } @empty {
             <div class="flex items-center justify-center h-full w-full flex-col">
               <span class="text-3xl text-center">Do First</span>
@@ -51,7 +51,7 @@
             </ion-list-header>
             }
             @for (item of matrixLists[1]; track item.id) {
-            <app-task-item [task]="item"></app-task-item>
+            <app-task-item [task]="item" (click)="selectedTask.set(item)"></app-task-item>
             } @empty {
             <div class="flex items-center justify-center h-full w-full flex-col">
               <span class="text-3xl text-center">Schedule</span>
@@ -71,7 +71,7 @@
             </ion-list-header>
             }
             @for (item of matrixLists[2]; track item.id) {
-            <app-task-item [task]="item"></app-task-item>
+            <app-task-item [task]="item" (click)="selectedTask.set(item)"></app-task-item>
             } @empty {
             <div class="flex items-center justify-center h-full w-full flex-col">
               <span class="text-3xl text-center">Delegate</span>
@@ -91,7 +91,7 @@
             </ion-list-header>
             }
             @for (item of matrixLists[3]; track item.id) {
-            <app-task-item [task]="item"></app-task-item>
+            <app-task-item [task]="item" (click)="selectedTask.set(item)"></app-task-item>
             } @empty {
             <div class="flex items-center justify-center h-full w-full flex-col">
               <span class="text-3xl text-center">Eliminate</span>
@@ -104,7 +104,7 @@
     </div>
   </div>
 
-  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5]"
+  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.6" [breakpoints]="[0, 0.6, 1]"
     (didDismiss)="onModalClosed($event)">
     <ng-template>
       <app-create-task class="h-full" [modelRef]="modal" [categoryId]="selectedCategory()!"></app-create-task>
@@ -112,6 +112,43 @@
   </ion-modal>
 </ion-content>
 
-<ion-footer>
-  <ion-button class="w-full m-0" id="open-modal" expand="full">Add Task</ion-button>
+<ion-footer @slideUpDown class="transition-all" [translucent]="true">
+  <ion-button class="w-full m-0" id="open-modal" expand="block">Add Task</ion-button>
 </ion-footer>
+
+
+<ion-modal #taskDetailModel [initialBreakpoint]="1" [breakpoints]="[0, 1]" [handle]="false"
+  style="--height: auto" (didDismiss)="selectedTask.set(null)">
+  <ng-template>
+    <ion-toolbar>
+      <ion-title>Task Details</ion-title>
+      <ion-button color="primary" slot="end" fill="clear" (click)="taskDetailModel.dismiss()">
+        Close
+      </ion-button>
+    </ion-toolbar>
+    <ion-item>
+      <div class="mb-4 w-full">
+        <div class="w-full py-3 pb-0 text-xl font-bold">{{selectedTask()?.name}}</div>
+        <div class="flex justify-between py-3">
+          <div id="time" class="flex items-center">
+            <ion-icon name="time-outline" class="text-xl"></ion-icon>
+            <span class="ml-2">{{selectedTask()?.createdAt | date: 'medium'}}</span>
+          </div>
+        </div>
+          <div class="flex gap-2 justify-between">
+            <ion-button color="primary" size="small" fill="outline" (click)="onTaskCompleted(selectedTask()?.id!)">
+              Mark As Done
+            </ion-button>
+            <div class="flex gap-2">
+              <ion-button color="warning" size="small" fill="outline" (click)="onEditTask(selectedTask()?.id!)">
+                Edit
+              </ion-button>
+              <ion-button color="danger" size="small" fill="outline" (click)="onDeleteTask(selectedTask()?.id!)">
+                Delete
+              </ion-button>
+            </div>
+          </div>
+      </div>
+    </ion-item>
+  </ng-template>
+</ion-modal>

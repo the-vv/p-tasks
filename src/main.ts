@@ -9,6 +9,7 @@ import { environment } from './environments/environment';
 import { AppInitService } from './app/services/app-init.service';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { StorageService } from './app/services/storage.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 if (environment.production) {
   enableProdMode();
@@ -31,6 +32,7 @@ bootstrapApplication(AppComponent, {
       useFactory: initializeApp,
       deps: [AppInitService, StorageService],
       multi: true
-    }
+    },
+    importProvidersFrom(BrowserAnimationsModule)
   ],
 });

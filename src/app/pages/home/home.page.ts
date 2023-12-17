@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, QueryList, ViewChild, ViewChildren, effect, signal } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { ICategory, ITask } from '../../models/tasks.model';
-import { IonCard, IonSegmentButton, IonicModule } from '@ionic/angular';
+import { IonCard, IonModal, IonSegmentButton, IonicModule } from '@ionic/angular';
 import { AppConfigPipe } from 'src/app/pipes/app-config.pipe';
 import { CommonModule } from '@angular/common';
 import { AnimationController } from '@ionic/angular/standalone';
 import { CreateTaskComponent } from '../../components/create-task/create-task.component';
 import { TaskItemComponent } from 'src/app/components/task-item/task-item.component';
+import { slideUpDownAnimation } from '../../configs/animations';
 
 @Component({
   selector: 'app-home',
@@ -23,9 +24,13 @@ import { TaskItemComponent } from 'src/app/components/task-item/task-item.compon
   providers: [
     StorageService
   ],
+  animations: [
+    slideUpDownAnimation
+  ]
 })
 export class HomePage implements AfterViewInit {
 
+  @ViewChild('taskDetailModel') taskDetailModel!: IonModal;
   @ViewChild('matrixContainer', { read: ElementRef }) matrixContainer!: ElementRef<HTMLDivElement>;
   @ViewChildren(IonSegmentButton, { read: ElementRef }) segmentButtons!: QueryList<ElementRef<HTMLIonCardElement>>;
   @ViewChildren(IonCard, { read: ElementRef }) cards!: QueryList<ElementRef<HTMLIonCardElement>>;
@@ -44,6 +49,7 @@ export class HomePage implements AfterViewInit {
       this[3] = [];
     }
   };
+  public selectedTask = signal<ITask | null>(null);
 
   constructor(
     private storage: StorageService,
@@ -64,6 +70,12 @@ export class HomePage implements AfterViewInit {
             .play();
         });
         this.categoriesAnimationPlayed = true;
+      }
+    });
+    effect(() => {
+      console.log(this.selectedTask())
+      if (this.selectedTask()) {
+        this.taskDetailModel.present();        
       }
     })
   }
@@ -142,6 +154,22 @@ export class HomePage implements AfterViewInit {
         console.error(error);
         // TODO show toast
       });
+  }
+
+  public onCloseTaskDetail() {
+    this.selectedTask.set(null);
+  }
+
+  public onDeleteTask(id: string) {
+
+  }
+
+  public onEditTask(id: string) {
+
+  }
+
+  public onTaskCompleted(id: string) {
+
   }
 
 }

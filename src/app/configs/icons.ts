@@ -1,11 +1,13 @@
 import { addIcons } from "ionicons";
 import {
     add,
-    arrowForward
+    arrowForward,
+    timeOutline,
+    closeOutline
 } from 'ionicons/icons';
 
 export const setupIcons = () => {
     addIcons({
-        add, arrowForward,
+        add, arrowForward, timeOutline, closeOutline
     })
 }
