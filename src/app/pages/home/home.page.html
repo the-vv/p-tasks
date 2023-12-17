@@ -104,10 +104,10 @@
     </div>
   </div>
 
-  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.6" [breakpoints]="[0, 0.6, 1]"
-    (didDismiss)="onModalClosed($event)">
+  <ion-modal #taskCreateEditModel trigger="open-modal" [initialBreakpoint]="0.6" [breakpoints]="[0, 0.6, 1]"
+    (didDismiss)="onModalClosed($event)" (didPresent)="isEditingTask.set(true)">
     <ng-template>
-      <app-create-task class="h-full" [modelRef]="modal" [categoryId]="selectedCategory()!"></app-create-task>
+      <app-create-task class="h-full" [modelRef]="taskCreateEditModel" [categoryId]="selectedCategory()!" [task]="selectedTask()"></app-create-task>
     </ng-template>
   </ion-modal>
 </ion-content>
@@ -118,7 +118,7 @@
 
 
 <ion-modal #taskDetailModel [initialBreakpoint]="1" [breakpoints]="[0, 1]" [handle]="false"
-  style="--height: auto" (didDismiss)="selectedTask.set(null)">
+  style="--height: auto" (didDismiss)="!isEditingTask() && selectedTask.set(null)">
   <ng-template>
     <ion-toolbar>
       <ion-title>Task Details</ion-title>
@@ -140,7 +140,7 @@
               Mark As Done
             </ion-button>
             <div class="flex gap-2">
-              <ion-button color="warning" size="small" fill="outline" (click)="onEditTask(selectedTask()?.id!)">
+              <ion-button color="warning" size="small" fill="outline" (click)="onEditTask()">
                 Edit
               </ion-button>
               <ion-button color="danger" size="small" fill="outline" (click)="onDeleteTask(selectedTask()?.id!)">

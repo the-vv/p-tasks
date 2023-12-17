@@ -32,6 +32,7 @@ import { CommonService } from 'src/app/services/common.service';
 export class HomePage implements AfterViewInit {
 
   @ViewChild('taskDetailModel') taskDetailModel!: IonModal;
+  @ViewChild('taskCreateEditModel') taskCreateEditModel!: IonModal;
   @ViewChild('matrixContainer', { read: ElementRef }) matrixContainer!: ElementRef<HTMLDivElement>;
   @ViewChildren(IonSegmentButton, { read: ElementRef }) segmentButtons!: QueryList<ElementRef<HTMLIonCardElement>>;
   @ViewChildren(IonCard, { read: ElementRef }) cards!: QueryList<ElementRef<HTMLIonCardElement>>;
@@ -51,6 +52,7 @@ export class HomePage implements AfterViewInit {
     }
   };
   public selectedTask = signal<ITask | null>(null);
+  public isEditingTask = signal<boolean>(false);
 
   constructor(
     private storage: StorageService,
@@ -126,7 +128,7 @@ export class HomePage implements AfterViewInit {
       this.getTasks();
     }).catch((error) => {
       console.error(error);
-      // TODO show toast
+      this.commonService.showToast('Something went wrong');
     });
   }
 
@@ -144,6 +146,8 @@ export class HomePage implements AfterViewInit {
     if (event.detail.data) {
       this.getTasks();
     }
+    this.isEditingTask.set(false);
+    this.selectedTask.set(null);
   }
 
   private getTasks() {
@@ -155,7 +159,7 @@ export class HomePage implements AfterViewInit {
         });
       }).catch((error) => {
         console.error(error);
-        // TODO show toast
+        this.commonService.showToast('Something went wrong');
       });
   }
 
@@ -188,8 +192,10 @@ export class HomePage implements AfterViewInit {
     await alert.present();
   }
 
-  public onEditTask(id: string) {
-
+  public async onEditTask() {
+    this.isEditingTask.set(true);
+    await this.taskDetailModel.dismiss();
+    await this.taskCreateEditModel.present();
   }
 
   public onTaskCompleted(id: string) {

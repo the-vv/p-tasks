@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Create Task</ion-title>
-    <ion-button color="primary" slot="end" (click)="onCreate()">
-      Create
+    <ion-title>{{this.isUpdate ? 'Update' : 'Create'}} Task</ion-title>
+    <ion-button color="primary" slot="end" fill="clear" (click)="onCreate()">
+      {{this.isUpdate ? 'Update' : 'Create'}}
     </ion-button>
   </ion-toolbar>
 </ion-header>
@@ -35,7 +35,7 @@
   </ion-item>
   @if (showValidation) {
   <div class="border-red-500 rounded-md p-2 border text-red-500 mx-3 mt-6">
-    Choose a priority and enter the task name
+    {{validationMessages}}
   </div>
   }
 </ion-content>

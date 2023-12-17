@@ -3,13 +3,17 @@ import { Storage } from '@ionic/storage-angular';
 import { EStorageKeys } from '../models/storage.model';
 import { ICategory, ITask } from '../models/tasks.model';
 import { v4 as uuidv4 } from 'uuid';
+import { CommonService } from './common.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StorageService {
 
-  constructor(private storage: Storage) { }
+  constructor(
+    private storage: Storage,
+    private commonService: CommonService
+  ) { }
 
   public async init() {
     await this.storage.create();
@@ -29,22 +33,28 @@ export class StorageService {
 
   public async getCategories(): Promise<ICategory[]> {
     return await this.storage.get(EStorageKeys.tasksCategories)
-    .catch((error) => {
-      console.error(error);
-      // TODO show toast
-    })
+      .catch((error) => {
+        console.error(error);
+        // TODO show toast
+      })
   }
 
   public async addTask(task: ITask) {
     try {
-      let tasks = await this.storage.get(EStorageKeys.tasks);
+      let tasks: ITask[] = await this.storage.get(EStorageKeys.tasks);
       if (!tasks) {
         tasks = [];
       }
+      const taskExists = tasks.find((taskItem) => (taskItem.name === task.name && taskItem.categoryId === task.categoryId));
+      if (taskExists) {
+        this.commonService.showToast('Task already exists');
+        return false;
+      }
       tasks.push(task);
-      this.storage.set(EStorageKeys.tasks, tasks);
+      await this.storage.set(EStorageKeys.tasks, tasks);
+      return true;
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
 
@@ -52,12 +62,13 @@ export class StorageService {
     try {
       let tasks: ITask[] = await this.storage.get(EStorageKeys.tasks);
       if (!tasks) {
-        return;
+        return false;
       }
       tasks = tasks.filter((task) => task.id !== taskId);
-      this.storage.set(EStorageKeys.tasks, tasks);
+      await this.storage.set(EStorageKeys.tasks, tasks);
+      return true;
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
 
@@ -67,15 +78,21 @@ export class StorageService {
       if (!tasks) {
         return;
       }
+      const taskExists = tasks.find((taskItem) => (taskItem.name === task.id && taskItem.id !== task.id && taskItem.categoryId === task.categoryId));
+      if (taskExists) {
+        this.commonService.showToast('Task already exists');
+        return false;
+      }
       tasks = tasks.map((taskItem) => {
         if (taskItem.id === task.id) {
           return task;
         }
         return taskItem;
       });
-      this.storage.set(EStorageKeys.tasks, tasks);
+      await this.storage.set(EStorageKeys.tasks, tasks);
+      return true;
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
 
